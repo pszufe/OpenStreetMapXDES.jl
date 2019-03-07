@@ -1,5 +1,6 @@
-function departure_time(w::AbstractMatrix{Float64}, route::Array{Tuple{Int64,Int64},1}) 
-    -(1 + rand()* 0.3 - 0.15) * sum(w[edge[1],edge[2]] for edge in route)
+function departure_time(w::AbstractMatrix{Float64}, route::Array{Tuple{Int64,Int64},1})
+    isempty(route) ? (driving_time = 0) : (driving_time = sum(w[edge[1],edge[2]] for edge in route))
+    -(1 + rand()* 0.3 - 0.15) * driving_time
 end
 
 function calculate_driving_time(ρ::Float64,
