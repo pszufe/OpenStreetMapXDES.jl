@@ -12,7 +12,6 @@ function calculate_driving_time(ρ::Float64,
 end
 
 function run_single_iteration!(sim_data::SimData, 
-                                distribution::Distributions.Distribution, 
                                 λ_ind::Float64,
                                 λ_soc::Float64;
                                 perturbed::Bool = true)
@@ -59,12 +58,11 @@ end
 
 
 function run_simulation!(sim_data::SimData, 
-                                distribution::Distributions.Distribution, 
                                 λ_ind::Float64,
                                 λ_soc::Float64,
                                 iter::Int64;
 								perturbed::Bool = true)
     for i = 1:iter
-        run_single_iteration!(sim_data, distribution, λ_ind, λ_soc, perturbed = perturbed)
+        run_single_iteration!(sim_data, λ_ind, λ_soc, perturbed = perturbed)
     end
 end
