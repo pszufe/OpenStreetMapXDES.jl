@@ -12,17 +12,20 @@ function run_single_iteration!(sim_data::SimData,
                                 λ_ind::Float64,
                                 λ_soc::Float64;
                                 perturbed::Bool = true)
-    sim_clock = rand(distribution,length(sim_data.population))
-	m, n = size(sim_data.map_data.w)
+    sim_clock = PriorityQueue{Int, Float64}()
+    for i = 1:length(sim_data.population)        
+        sim_clock[i] = rand(distribution) 
+    end
+    m, n = size(sim_data.map_data.w)
     traffic_densities = SparseArrays.spzeros(m, n)
     avg_driving_times = SparseArrays.spzeros(m, n)
     car_count = SparseArrays.spzeros(m, n)
-    id = argmin(sim_clock)
-    while sim_clock[id] < Inf
+    while !isempty(sim_clock)
+        id, current_time = peek(sim_clock)
         agent = sim_data.population[id]
         (agent.current_edge != 1) && (traffic_densities[agent.route[agent.current_edge - 1][1], agent.route[agent.current_edge - 1][2]] -= 1.0)
         if agent.current_edge > length(agent.route)
-            sim_clock[id] = Inf
+            dequeue!(sim_clock)
             agent.current_edge = 1
         else
             edge0, edge1 = agent.route[agent.current_edge] 
@@ -37,17 +40,16 @@ function run_single_iteration!(sim_data::SimData,
             agent.current_edge += 1 
             sim_clock[id] += driving_time
         end
-        id = argmin(sim_clock)
     end
     for agent in sim_data.population
         perturbed ? λ = λ_soc : λ = λ_soc * rand(Uniform(0.0,2.0))
         agent.expected_driving_times += λ *(avg_driving_times - agent.expected_driving_times)
-		f(x, B = agent.fin_node, nodes = sim_data.map_data.nodes, vertices = sim_data.vertices_to_nodes) = OpenStreetMapX.get_distance(x,B,nodes,vertices)
-		agent.route = get_route(sim_data.map_data,
-									sim_data.driving_times + agent.expected_driving_times,
-									agent.start_node, 
-									agent.fin_node,
-									heuristic = f)
+        f(x, B = agent.fin_node, nodes = sim_data.map_data.nodes, vertices = sim_data.vertices_to_nodes) = OpenStreetMapX.get_distance(x,B,nodes,vertices)
+        agent.route = get_route(sim_data.map_data,
+                                sim_data.driving_times + agent.expected_driving_times,
+                                agent.start_node, 
+                                agent.fin_node,
+                                heuristic = f)
     end
 end
 
