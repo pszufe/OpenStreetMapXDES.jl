@@ -48,7 +48,7 @@ function run_single_iteration!(sim_data::SimData,
     for agent in sim_data.population
         perturbed ? λ = λ_soc : λ = λ_soc * rand(Uniform(0.0,2.0))
         agent.expected_driving_times += λ *(avg_driving_times - agent.expected_driving_times)
-        f(x, B = agent.fin_node, nodes = sim_data.map_data.nodes, vertices = sim_data.vertices_to_nodes) = OpenStreetMapX.get_distance(x,B,nodes,vertices)
+        f(x, B = agent.fin_node, nodes = sim_data.map_data.nodes, vertices = sim_data.map_data.n) = OpenStreetMapX.get_distance(x,B,nodes,vertices)
         agent.route = get_route(sim_data.map_data,
                                 sim_data.driving_times + agent.expected_driving_times,
                                 agent.start_node, 

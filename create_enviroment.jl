@@ -1,14 +1,3 @@
-function get_velocities(m::OpenStreetMapX.MapData, 
-            class_speeds::Dict{Int,Int} = OpenStreetMapX.SPEED_ROADS_URBAN)
-    @assert length(m.e) == length(m.w.nzval)
-    indices = [(m.v[i],m.v[j]) for (i,j) in m.e]
-    V = Array{Float64}(undef,length(m.e))
-    for i = 1:length(indices)
-        V[i] = class_speeds[m.class[i]]/3.6
-    end
-    return SparseArrays.sparse(map(i -> m.v[i[1]], m.e), map(i -> m.v[i[2]], m.e),V)
-end
-
 function get_max_densities(m::OpenStreetMapX.MapData,
                             l::Float64)
     roadways_lanes = Dict{Int64,Int64}()
@@ -64,7 +53,7 @@ function get_sim_data(m::OpenStreetMapX.MapData,
                     speeds = OpenStreetMapX.SPEED_ROADS_URBAN)::SimData
 	vertices_to_nodes = Dict(reverse.(collect(m.v)))
     driving_times = OpenStreetMapX.create_weights_matrix(m, OpenStreetMapX.network_travel_times(m, speeds))
-    velocities = get_velocities(m, speeds)
+    velocities = OpenStreetMapX.get_velocities(m, speeds)
 	max_densities = get_max_densities(m, l)
     agents = create_agents(m, driving_times, N)
     return SimData(m,
