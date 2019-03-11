@@ -1,0 +1,16 @@
+name = "OpenStreetMapXDES"
+uuid = "4b893ba0-438f-11e9-3ee9-5df3d5aef306"
+authors = ["Bartosz Pankratz <bartosz.pankratz@gmail.com>", "Przemyslaw Szufel <pszufe@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+LightGraphs = "093fc24a-ae57-5d10-9952-331d41423f4d"
+Nanocsv = "75cf22a0-b58f-11e8-26fa-714c6ee42dd4"
+OpenStreetMapX = "86cd37e6-c0ff-550b-95fe-21d72c8d4fc9"
+Serialization = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
+SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
