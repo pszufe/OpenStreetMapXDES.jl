@@ -14,3 +14,10 @@ mutable struct SimData
 	max_densities::SparseArrays.SparseMatrixCSC{Float64,Int64}
 	population::Array{Agent,1}
 end
+
+mutable struct Stats
+    cars_count::SparseArrays.SparseMatrixCSC{Float64,Int64}
+    avg_driving_times::SparseArrays.SparseMatrixCSC{Float64,Int64}
+end
+
+Stats(m::Int,n::Int) = Stats(SparseArrays.spzeros(m, n), SparseArrays.spzeros(m, n))

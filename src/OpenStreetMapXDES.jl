@@ -7,7 +7,9 @@ using DataStructures
 
 include("types.jl")
 include("routing.jl")
-include("create_enviroment.jl")
+include("ai.jl")
 include("run.jl")
+include("create_enviroment.jl")
+include("run_delay.jl")
 
 end # module
