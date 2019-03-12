@@ -16,8 +16,10 @@ mutable struct SimData
 end
 
 mutable struct Stats
+	routes_changed::Int
+	delays::Array{Float64,1}
     cars_count::SparseArrays.SparseMatrixCSC{Float64,Int64}
     avg_driving_times::SparseArrays.SparseMatrixCSC{Float64,Int64}
 end
 
-Stats(m::Int,n::Int) = Stats(SparseArrays.spzeros(m, n), SparseArrays.spzeros(m, n))
+Stats(m::Int,n::Int) = Stats(0, Float64[], SparseArrays.spzeros(m, n), SparseArrays.spzeros(m, n))

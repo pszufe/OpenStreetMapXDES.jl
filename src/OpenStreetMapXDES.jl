@@ -3,6 +3,7 @@ module OpenStreetMapXDES
 using SparseArrays
 using OpenStreetMapX
 using DataStructures
+using Statistics
 
 
 include("types.jl")

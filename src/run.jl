@@ -2,7 +2,7 @@
 
 function departure_time(w::AbstractMatrix{Float64}, route::Array{Tuple{Int64,Int64},1})
     isempty(route) ? (driving_time = 0) : (driving_time = sum(w[edge[1],edge[2]] for edge in route))
-    -(1 + rand()* 0.3 - 0.15) * driving_time
+    return driving_time
 end
 
 function calculate_driving_time(ρ::Float64,
@@ -19,17 +19,18 @@ function update_stats!(stats::Stats, edge0::Int, edge1::Int, driving_time::Float
     stats.avg_driving_times[edge0, edge1] += (driving_time - stats.avg_driving_times[edge0, edge1])/stats.cars_count[edge0, edge1]
 end
 
-function update_routes!(sim_data::SimData,
-                        driving_times::SparseArrays.SparseMatrixCSC{Float64,Int64}, 
+function update_routes!(sim_data::SimData, stats::Stats, 
                         λ_soc::Float64, perturbed::Bool)
      for agent in sim_data.population
         perturbed ? λ = λ_soc : λ = λ_soc * rand(Uniform(0.0,2.0))
-        update_beliefs!(agent, driving_times, λ)
+        update_beliefs!(agent, stats.avg_driving_times, λ)
+		old_route = agent.route
         f(x, B = agent.fin_node, nodes = sim_data.map_data.nodes, vertices = sim_data.map_data.n) = OpenStreetMapX.get_distance(x,B,nodes,vertices)
         agent.route = get_route(sim_data.map_data,
                                 sim_data.driving_times + agent.expected_driving_times,
                                 agent.start_node, 
                                 agent.fin_node,
                                 heuristic = f)
+		(agent.route != old_route) && (stats.routes_changed += 1) 
     end
 end

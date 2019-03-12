@@ -16,6 +16,7 @@ function run_single_iteration!(sim_data::SimData,
         agent = sim_data.population[id]
         (agent.current_edge != 1) && (traffic_densities[agent.route[agent.current_edge - 1][1], agent.route[agent.current_edge - 1][2]] -= 1.0)
         if agent.current_edge > length(agent.route)
+			push!(stats.delays, current_time)
             DataStructures.dequeue!(sim_clock)
             agent.current_edge = 1
         else
@@ -31,7 +32,8 @@ function run_single_iteration!(sim_data::SimData,
             sim_clock[id] += driving_time
         end
     end
-    update_routes!(sim_data, stats.avg_driving_times, λ_soc, perturbed)
+    update_routes!(sim_data, stats, λ_soc, perturbed)
+	return stats
 end
 
 
@@ -40,7 +42,17 @@ function run_simulation!(sim_data::SimData,
                                 λ_soc::Float64,
                                 iter::Int64;
 								perturbed::Bool = true)
+	mean_driving_times = Float64[]
+	std_driving_times = Float64[]
+	mean_delays = Float64[]
+	std_delays = Float64[]
     for i = 1:iter
-        run_single_iteration!(sim_data, λ_ind, λ_soc, perturbed = perturbed)
+        stats = run_single_iteration!(sim_data, λ_ind, λ_soc, perturbed = perturbed)
+		filtered_times = filter(x -> !isnan(x) && x != 0, stats.avg_driving_times ./ sim_data.driving_times)
+		push!(mean_driving_times, Statistics.mean(filtered_times))
+		push!(std_driving_times, Statistics.std(filtered_times))
+		push!(mean_delays, Statistics.mean(stats.delays))
+		push!(std_delays, Statistics.std(stats.delays))
     end
+	return mean_driving_times, std_driving_times, mean_delays, std_delays
 end
