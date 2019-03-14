@@ -2,7 +2,7 @@
 
 function departure_time(w::AbstractMatrix{Float64}, route::Array{Tuple{Int64,Int64},1})
     isempty(route) ? (driving_time = 0) : (driving_time = sum(w[edge[1],edge[2]] for edge in route))
-    return driving_time
+    return -driving_time
 end
 
 function calculate_driving_time(ρ::Float64,
