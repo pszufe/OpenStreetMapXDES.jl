@@ -126,8 +126,6 @@ function update_queue!(sim_data::SimData, sim_flow::ControlFlow, edge::Tuple{Int
     agent = sim_data.population[id]
     #find if he is capable of moving forward:
     update_route!(sim_data, sim_flow, edge, id, previous_clock) || return false
-    #if yes, remove him from queue:
-    
     #calculate how long he has been waiting:
     waiting_time = current_time - previous_clock
     #if he finish his route, remove him from model:
@@ -135,11 +133,7 @@ function update_queue!(sim_data::SimData, sim_flow::ControlFlow, edge::Tuple{Int
     update_control_flow!(sim_data, sim_flow, agent.route[agent.current_edge],
                                 stats, id, λ_ind, current_time, waiting_time)  
     #update agent(s) in his previous edge:
-    
-    if agent.current_edge > 2 
-        prev_edge = agent.route[agent.current_edge - 2]
-        update_previous_edge!(sim_data, sim_flow, prev_edge, stats, current_time, λ_ind)
-    end
+    agent.current_edge > 2 && update_previous_edge!(sim_data, sim_flow, agent.route[agent.current_edge - 2], stats, current_time, λ_ind)
     return true
 end
 
