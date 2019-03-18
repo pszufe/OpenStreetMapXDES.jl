@@ -17,7 +17,6 @@ l = 5.0;
 map_data = OpenStreetMapX.get_map_data(datapath, mapfile);
 sim_data = get_sim_data(map_data,N,l);
 
-@time res = run_simulation!(sim_data,
-                λ_ind,
-                λ_soc,
-                iter)
+@time res_d = run_simulation!(sim_data, λ_ind, λ_soc, iter)
+
+@time res_q = run_sim!(sim_data, λ_ind, λ_soc, iter)
