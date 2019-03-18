@@ -46,6 +46,7 @@ function run_simulation!(sim_data::SimData,
 	std_driving_times = Float64[]
 	mean_delays = Float64[]
 	std_delays = Float64[]
+	routes_changed = Int[]
     for i = 1:iter
         stats = run_single_iteration!(sim_data, λ_ind, λ_soc, perturbed = perturbed)
 		filtered_times = filter(x -> !isnan(x) && x != 0, stats.avg_driving_times ./ sim_data.driving_times)
@@ -53,6 +54,7 @@ function run_simulation!(sim_data::SimData,
 		push!(std_driving_times, Statistics.std(filtered_times))
 		push!(mean_delays, Statistics.mean(stats.delays))
 		push!(std_delays, Statistics.std(stats.delays))
+		push!(routes_changed,stats.routes_changed)
     end
-	return mean_driving_times, std_driving_times, mean_delays, std_delays
+	return mean_driving_times, std_driving_times, mean_delays, std_delays, routes_changed
 end

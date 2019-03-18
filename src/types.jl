@@ -8,7 +8,6 @@ end
 
 mutable struct SimData
     map_data::OpenStreetMapX.MapData
-	vertices_to_nodes::Dict{Int64,Int64} 
 	driving_times::SparseArrays.SparseMatrixCSC{Float64,Int64}
 	velocities::SparseArrays.SparseMatrixCSC{Float64,Int64}
 	max_densities::SparseArrays.SparseMatrixCSC{Float64,Int64}

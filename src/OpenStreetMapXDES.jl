@@ -12,5 +12,9 @@ include("ai.jl")
 include("run.jl")
 include("create_enviroment.jl")
 include("run_delay.jl")
+#include queue module:
+include("queue/types.jl")
+include("queue/queue.jl")
+include("queue/run.jl")
 
 end # module

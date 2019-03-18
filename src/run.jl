@@ -25,12 +25,9 @@ function update_routes!(sim_data::SimData, stats::Stats,
         perturbed ? λ = λ_soc : λ = λ_soc * rand(Uniform(0.0,2.0))
         update_beliefs!(agent, stats.avg_driving_times, λ)
 		old_route = agent.route
-        f(x, B = agent.fin_node, nodes = sim_data.map_data.nodes, vertices = sim_data.map_data.n) = OpenStreetMapX.get_distance(x,B,nodes,vertices)
         agent.route = get_route(sim_data.map_data,
                                 sim_data.driving_times + agent.expected_driving_times,
-                                agent.start_node, 
-                                agent.fin_node,
-                                heuristic = f)
+                                agent.start_node, agent.fin_node)
 		(agent.route != old_route) && (stats.routes_changed += 1) 
     end
 end

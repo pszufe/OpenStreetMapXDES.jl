@@ -51,15 +51,9 @@ function get_sim_data(m::OpenStreetMapX.MapData,
                     N::Int64,
 					l::Float64,
                     speeds = OpenStreetMapX.SPEED_ROADS_URBAN)::SimData
-	vertices_to_nodes = Dict(reverse.(collect(m.v)))
     driving_times = OpenStreetMapX.create_weights_matrix(m, OpenStreetMapX.network_travel_times(m, speeds))
     velocities = OpenStreetMapX.get_velocities(m, speeds)
 	max_densities = get_max_densities(m, l)
     agents = create_agents(m, driving_times, N)
-    return SimData(m,
-					vertices_to_nodes,
-                    driving_times,
-                    velocities,
-					max_densities,
-                    agents)
+    return SimData(m, driving_times, velocities, max_densities, agents)
 end
