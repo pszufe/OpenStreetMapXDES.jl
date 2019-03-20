@@ -1,4 +1,5 @@
-using Test, OpenStreetMapXDES
+using Test
+using OpenStreetMapX, OpenStreetMapXDES
 import LightGraphs
 
 @testset "maps" begin

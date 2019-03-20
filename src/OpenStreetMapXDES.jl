@@ -5,6 +5,13 @@ using OpenStreetMapX
 using DataStructures
 using Statistics
 
+export get_sim_data
+export run_simulation!, run_single_iteration!
+export run_sim!
+export get_nodes
+export create_agents, get_max_densities
+export get_route
+
 
 include("types.jl")
 include("routing.jl")
