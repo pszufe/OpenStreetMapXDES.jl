@@ -131,9 +131,9 @@ function update_queue!(sim_data::SimData, sim_flow::ControlFlow, edge::Tuple{Int
     #if he finish his route, remove him from model:
     #otherwise, update his stats:
     update_control_flow!(sim_data, sim_flow, agent.route[agent.current_edge],
-                                stats, id, λ_ind, current_time, waiting_time)  
+                                stats, id, λ, current_time, waiting_time)  
     #update agent(s) in his previous edge:
-    agent.current_edge > 2 && update_previous_edge!(sim_data, sim_flow, agent.route[agent.current_edge - 2], stats, current_time, λ_ind)
+    agent.current_edge > 2 && update_previous_edge!(sim_data, sim_flow, agent.route[agent.current_edge - 2], stats, current_time, λ)
     return true
 end
 
