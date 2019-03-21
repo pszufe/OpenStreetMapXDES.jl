@@ -10,6 +10,8 @@ m = OpenStreetMapX.get_map_data("data/reno_east3.osm",use_cache=false);
 
 using Random
 Random.seed!(0);
+@test rand(Int) == -4635026124992869592
+
 sim_data = get_sim_data(m,500,5.0);
 @test sim_data.population[1].start_node == 259 
 @test sim_data.population[245].fin_node == 1879 
