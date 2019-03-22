@@ -4,6 +4,7 @@ using SparseArrays
 using OpenStreetMapX
 using DataStructures
 using Statistics
+using DelimitedFiles
 
 export get_sim_data
 export run_simulation!, run_single_iteration!
