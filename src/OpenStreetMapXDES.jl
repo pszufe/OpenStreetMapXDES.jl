@@ -5,6 +5,7 @@ using OpenStreetMapX
 using DataStructures
 using Statistics
 using DelimitedFiles
+using Serialization
 
 export get_sim_data
 export run_simulation!, run_single_iteration!

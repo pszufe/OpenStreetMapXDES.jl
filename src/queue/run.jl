@@ -82,4 +82,8 @@ function run_sim!(sim_data::SimData, λ_ind::Float64, λ_soc::Float64,
 	filename = "queue_lind_$(λ_ind)_lsoc_$(λ_soc)"
     file = transpose(hcat(mean_driving_times, std_driving_times, mean_delays, std_delays, routes_changed))
     DelimitedFiles.writedlm( "$filename.csv",  file, ',')
+	cachefile = ("population_$(filename)"*".cache")
+    f=open(cachefile,"w");
+    Serialization.serialize(f,sim_data.population);
+    close(f);
 end
