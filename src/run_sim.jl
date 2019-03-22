@@ -14,7 +14,7 @@ iter = 1000;
 λ_soc = 0.2;
 l = 5.0;
 
-map_data = OpenStreetMapX.get_map_data(datapath, mapfile);
+map_data = OpenStreetMapX.get_map_data(datapath, mapfile; road_levels = Set(1:6));
 sim_data = get_sim_data(map_data,N,l);
 
 @time res_d = run_simulation!(sim_data, λ_ind, λ_soc, iter)
