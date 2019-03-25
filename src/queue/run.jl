@@ -65,25 +65,31 @@ Main function controlling a simulation
 """
 function run_sim!(sim_data::SimData, λ_ind::Float64, λ_soc::Float64,
                  iter::Int64; perturbed::Bool = true)
-    mean_driving_times = Float64[]
-    std_driving_times = Float64[]
-    mean_delays = Float64[]
-    std_delays = Float64[]
-    routes_changed = Int[]
+    #mean_driving_times = Float64[]
+    #std_driving_times = Float64[]
+    #mean_delays = Float64[]
+    #std_delays = Float64[]
+    #routes_changed = Int[]
+	
+    fname = "queue_lind_$(λ_ind)_lsoc_$(λ_soc)"
+    @info "Opening file $fname"
+    file = open(fname, "w")
+    println(file, "i,mean_driving_times,std_driving_times,mean_delays,std_delays,routes_changed")
     for i = 1:iter
         stats = run_once!(sim_data, λ_ind, λ_soc, perturbed = perturbed)
-        filtered_times = filter(x -> !isnan(x) && x != 0, stats.avg_driving_times ./ sim_data.driving_times)
-        push!(mean_driving_times, Statistics.mean(filtered_times))
-        push!(std_driving_times, Statistics.std(filtered_times))
-        push!(mean_delays, Statistics.mean(stats.delays))
-        push!(std_delays, Statistics.std(stats.delays))
-        push!(routes_changed,stats.routes_changed)
+		filtered_times = filter(x -> !isnan(x) && x != 0, stats.avg_driving_times ./ sim_data.driving_times)		
+        DelimitedFiles.writedlm(file,
+            transpose([i,mean(filtered_times), std(filtered_times), mean(stats.delays),std(stats.delays),stats.routes_changed]),
+            ',')
+        flush(file)
     end
-	filename = "queue_lind_$(λ_ind)_lsoc_$(λ_soc)"
-    file = transpose(hcat(mean_driving_times, std_driving_times, mean_delays, std_delays, routes_changed))
-    DelimitedFiles.writedlm( "$filename.csv",  file, ',')
-	cachefile = ("population_$(filename)"*".cache")
-    f=open(cachefile,"w");
-    Serialization.serialize(f,sim_data.population);
-    close(f);
+    close(file)
+	
+	#filename = "queue_lind_$(λ_ind)_lsoc_$(λ_soc)"
+    #file = transpose(hcat(mean_driving_times, std_driving_times, mean_delays, std_delays, routes_changed))
+    #DelimitedFiles.writedlm( "$filename.csv",  file, ',')
+	#cachefile = ("population_$(filename)"*".cache")
+    #f=open(cachefile,"w");
+    #Serialization.serialize(f,sim_data.population);
+    #close(f);
 end
