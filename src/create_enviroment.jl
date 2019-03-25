@@ -29,9 +29,13 @@ end
 function create_agents(m::OpenStreetMapX.MapData,
                         w::SparseArrays.SparseMatrixCSC{Float64,Int64},
                         N::Int64)
-    buffer = Dict{Tuple{Int64,Int64}, Array{Agent,1}}()
+    buffer = Dict{Tuple{Int64,Int64}, Vector{Agent}}()
+    nodes_list = Tuple{Int64,Int64}[]
     for i = 1:N
         nodes = get_nodes(m)
+        if i % 2000 == 0
+            @info "$i agents created"
+        end
         if !haskey(buffer,nodes)
             route = get_route(m, w, nodes[1], nodes[2])
             expected_driving_times = SparseArrays.spzeros(size(w)[1], size(w)[2])
@@ -40,17 +44,19 @@ function create_agents(m::OpenStreetMapX.MapData,
                             1,
                             expected_driving_times)
             buffer[nodes] = [agent]
+            push!(nodes_list,nodes)
         else
             push!(buffer[nodes],deepcopy(buffer[nodes][1]))
         end
     end
-    return vcat(collect(values(buffer))...)
+    return reduce(vcat,[buffer[k] for k in nodes_list])
 end
 
 function get_sim_data(m::OpenStreetMapX.MapData,
                     N::Int64,
 					l::Float64,
                     speeds = OpenStreetMapX.SPEED_ROADS_URBAN)::SimData
+                    
     driving_times = OpenStreetMapX.create_weights_matrix(m, OpenStreetMapX.network_travel_times(m, speeds))
     velocities = OpenStreetMapX.get_velocities(m, speeds)
 	max_densities = get_max_densities(m, l)

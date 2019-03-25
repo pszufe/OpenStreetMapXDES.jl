@@ -1,0 +1,1 @@
+./osmfilter "Winnipeg CMA_Full.osm" --keep="highway=motorway highway=motorway_link highway=trunk highway=trunk_link     highway=primary highway=primary_link highway=secondary highway=secondary_link highway=tertiary highway=tertiary_link highway=unclassified highway=residential" --drop-author -o="Winnipeg CMA.osm"

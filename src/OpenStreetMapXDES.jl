@@ -4,6 +4,7 @@ using SparseArrays
 using OpenStreetMapX
 using DataStructures
 using Statistics
+import Statistics.std, Statistics.mean
 using DelimitedFiles
 using Serialization
 
