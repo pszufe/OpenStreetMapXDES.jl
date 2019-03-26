@@ -65,11 +65,12 @@ Main function controlling a simulation
 """
 function run_sim!(sim_data::SimData, λ_ind::Float64, λ_soc::Float64,
                  iter::Int64; perturbed::Bool = true)
-    
-    fname = "queue_lind_$(λ_ind)_lsoc_$(λ_soc)"
+
+                 fname = "queue_lind_$(λ_ind)_lsoc_$(λ_soc)"
     @info "Opening file $fname"
     file = open(fname, "w")
     println(file, "i,mean_driving_times,std_driving_times,mean_delays,std_delays,routes_changed")
+
     
     for i = 1:iter
         stats = run_once!(sim_data, λ_ind, λ_soc, perturbed = perturbed)
