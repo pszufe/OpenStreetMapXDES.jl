@@ -26,7 +26,7 @@ function update_routes!(sim_data::SimData, stats::Stats,
         update_beliefs!(agent, stats.avg_driving_times, λ)
 		old_route = agent.route
         agent.route = get_route(sim_data.map_data,
-                                sim_data.driving_times + agent.expected_driving_times,
+                                agent.expected_driving_times,
                                 agent.start_node, agent.fin_node)
 		(agent.route != old_route) && (stats.routes_changed += 1) 
     end

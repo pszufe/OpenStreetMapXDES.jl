@@ -6,7 +6,7 @@ function run_single_iteration!(sim_data::SimData,
                                 perturbed::Bool = true)
     sim_clock = DataStructures.PriorityQueue{Int, Float64}()
     for i = 1:length(sim_data.population)        
-        sim_clock[i] = departure_time(sim_data.driving_times + sim_data.population[i].expected_driving_times, sim_data.population[i].route) 
+        sim_clock[i] = departure_time(sim_data.population[i].expected_driving_times, sim_data.population[i].route) 
     end
     m, n = size(sim_data.map_data.w)
     stats = Stats(m, n)
