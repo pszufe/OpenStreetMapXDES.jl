@@ -14,6 +14,15 @@ mutable struct SimData
 	population::Array{Agent,1}
 end
 
+mutable struct FlowData
+    map_data::OpenStreetMapX.MapData    
+    DAs_to_intersection::Dict{Int64,Int64}
+    demographic_data::Dict{Int64, Int64}
+    flow_dictionary::Dict{Int64,Int64}
+    flow_matrix::SparseArrays.SparseMatrixCSC{Int64,Int64}
+end
+
+
 mutable struct Stats
 	routes_changed::Int
 	delays::Array{Float64,1}

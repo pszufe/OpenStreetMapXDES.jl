@@ -7,6 +7,7 @@ using Statistics
 import Statistics.std, Statistics.mean
 using DelimitedFiles
 using Serialization
+using StatsBase
 
 export get_sim_data
 export run_simulation!, run_single_iteration!
@@ -15,6 +16,7 @@ export get_nodes
 export create_agents, get_max_densities
 export get_route
 
+export Agent, SimData, FlowData
 
 include("types.jl")
 include("routing.jl")
