@@ -38,10 +38,11 @@ function create_agents(m::OpenStreetMapX.MapData,
         end
         if !haskey(buffer,nodes)
             route = get_route(m, w, nodes[1], nodes[2])
+            expected_driving_times = SparseArrays.spzeros(size(w)[1], size(w)[2])
             agent = Agent(nodes[1], nodes[2],
                             route,
                             1,
-                            deepcopy(w))
+                            expected_driving_times)
             buffer[nodes] = [agent]
             push!(nodes_list,nodes)
         else
@@ -94,10 +95,11 @@ function create_agents(flow_data::FlowData,
            
         if !haskey(buffer,nodes)
             route = get_route(flow_data.map_data, w, nodes[1], nodes[2])
+            expected_driving_times = SparseArrays.spzeros(size(w)[1],size(w)[2])
             agent = Agent(nodes[1], nodes[2],
                             route,
                             1,
-                            deepcopy(w))
+                            expected_driving_times)
             buffer[nodes] = [agent]
             push!(nodes_list,nodes)   
         else

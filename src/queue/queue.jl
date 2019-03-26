@@ -53,7 +53,7 @@ function new_route!(sim_data::SimData, agent::Agent, edge::Tuple{Int,Int})
     end
     #select new route:
     agent.route = vcat(route, get_route(sim_data.map_data,
-                        agent.expected_driving_times,
+                        sim_data.driving_times + agent.expected_driving_times,
                         edge[2], agent.fin_node))
 end
 
