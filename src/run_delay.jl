@@ -41,7 +41,7 @@ function run_simulation!(sim_data::SimData,
                                 λ_ind::Float64,
                                 λ_soc::Float64,
                                 iter::Int64;
-								perturbed::Bool = true)
+								perturbed::Bool = true, proc_id=0)
 	#mean_driving_times = Float64[]
 	#std_driving_times = Float64[]
 	#mean_delays = Float64[]
@@ -51,21 +51,15 @@ function run_simulation!(sim_data::SimData,
     fname = "delay_lind_$(λ_ind)_lsoc_$(λ_soc)"
     @info "Opening file $fname"
     file = open(fname, "w")
-    println(file, "i,mean_driving_times,std_driving_times,mean_delays,std_delays,routes_changed")
+    println(file, "proc,time,i,type,l_ind,l_soc,mean_driving_times,std_driving_times,mean_delays,std_delays,routes_changed")
     for i = 1:iter
+        start_time = time()
         stats = run_single_iteration!(sim_data, λ_ind, λ_soc, perturbed = perturbed)
 		filtered_times = filter(x -> !isnan(x) && x != 0, stats.avg_driving_times ./ sim_data.driving_times)		
-        DelimitedFiles.writedlm(file,
-            transpose([i,mean(filtered_times), std(filtered_times), mean(stats.delays),std(stats.delays),stats.routes_changed]),
-            ',')
+        println(file,join(
+            [proc_id, Int(round(time()-start_time)), i,"D",λ_ind, λ_soc,mean(filtered_times), std(filtered_times), mean(stats.delays),std(stats.delays),stats.routes_changed], ","))
         flush(file)
     end
     close(file)
-	
-    #file = transpose(hcat(mean_driving_times, std_driving_times, mean_delays, std_delays, routes_changed))
-    #DelimitedFiles.writedlm( "$filename.csv",  file, ',')
-	#cachefile = ("population_$(filename)"*".cache")
-    #f=open(cachefile,"w");
-    #Serialization.serialize(f,sim_data.population);
-    #close(f);
+
 end

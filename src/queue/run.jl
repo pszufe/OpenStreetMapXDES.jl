@@ -64,21 +64,19 @@ Main function controlling a simulation
 * `perturbed`   : boolean variable; controls the perturbation of agent's learning
 """
 function run_sim!(sim_data::SimData, λ_ind::Float64, λ_soc::Float64,
-                 iter::Int64; perturbed::Bool = true)
+                 iter::Int64; perturbed::Bool = true,proc_id=0)
 
                  fname = "queue_lind_$(λ_ind)_lsoc_$(λ_soc)"
     @info "Opening file $fname"
     file = open(fname, "w")
-    println(file, "i,mean_driving_times,std_driving_times,mean_delays,std_delays,routes_changed")
-
+    println(file, "proc,time,i,type,l_ind,l_soc,mean_driving_times,std_driving_times,mean_delays,std_delays,routes_changed")
     
     for i = 1:iter
+        start_time = time()
         stats = run_once!(sim_data, λ_ind, λ_soc, perturbed = perturbed)
-        filtered_times = filter(x -> !isnan(x) && x != 0, stats.avg_driving_times ./ sim_data.driving_times)
-        
-        DelimitedFiles.writedlm(file,
-            transpose([i,mean(filtered_times), std(filtered_times), mean(stats.delays),std(stats.delays),stats.routes_changed]),
-            ',')
+        filtered_times = filter(x -> !isnan(x) && x != 0, stats.avg_driving_times ./ sim_data.driving_times)        
+        println(file,join(
+            [proc_id, Int(round(time()-start_time)), i,"Q",λ_ind, λ_soc,mean(filtered_times), std(filtered_times), mean(stats.delays),std(stats.delays),stats.routes_changed], ","))
         flush(file)
     end
     close(file)
