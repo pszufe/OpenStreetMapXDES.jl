@@ -55,7 +55,7 @@ l = 5.0;
 sweep = collect(Iterators.product( 1:2,
               range(0.0, stop = 1.0, step = 0.05),
               range(0.0, stop = 1.0, step = 0.05)))
-              
+
 
 flow_data = get_flow_data(datapath,road_levels = Set(1:4));
 
@@ -65,10 +65,10 @@ sim_data = get_sim_data(flow_data,N,l);
 @sync @distributed for ele in sweep
     mode, λ_ind, λ_soc = ele
     sd1 = deepcopy(sim_data)
-    if mode == 1
-        run_sim!(sd1, λ_ind, λ_soc, iter; proc_id=myid())
-    else 
-        run_simulation!(sd1, λ_ind, λ_soc, iter; proc_id=myid())
+    if mode % 2 == 1
+        run_sim!(sd1, λ_ind, λ_soc, iter; perturbed=false, proc_id=myid())
+    else
+        run_simulation!(sd1, λ_ind, λ_soc, iter; perturbed=false, proc_id=myid())
     end
-end  
+end
 println("all done")
