@@ -48,7 +48,7 @@ function run_simulation!(sim_data::SimData,
 	#std_delays = Float64[]
 	#routes_changed = Int[]
     
-    fname = "delay_lind_$(λ_ind)_lsoc_$(λ_soc)"
+    fname = "$(lpad(proc_id, 4, '0'))_D_lind_$(λ_ind)_lsoc_$(λ_soc)"
     @info "Opening file $fname"
     file = open(fname, "w")
     println(file, "proc,time,i,type,l_ind,l_soc,mean_driving_times,std_driving_times,mean_delays,std_delays,routes_changed")

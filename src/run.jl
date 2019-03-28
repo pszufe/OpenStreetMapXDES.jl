@@ -19,15 +19,16 @@ function update_stats!(stats::Stats, edge0::Int, edge1::Int, driving_time::Float
     stats.avg_driving_times[edge0, edge1] += (driving_time - stats.avg_driving_times[edge0, edge1])/stats.cars_count[edge0, edge1]
 end
 
-function update_routes!(sim_data::SimData, stats::Stats, 
+function update_routes!(sim_data::SimData, stats::Stats,
                         λ_soc::Float64, perturbed::Bool)
      for agent in sim_data.population
-        perturbed ? λ = λ_soc : λ = λ_soc * rand(Uniform(0.0,2.0))
+        #perturbed ? λ = λ_soc : λ = λ_soc * rand(Uniform(0.0,2.0))
+		λ = λ_soc
         update_beliefs!(agent, stats.avg_driving_times, λ)
 		old_route = agent.route
         agent.route = get_route(sim_data.map_data,
                                 sim_data.driving_times + agent.expected_driving_times,
                                 agent.start_node, agent.fin_node)
-		(agent.route != old_route) && (stats.routes_changed += 1) 
+		(agent.route != old_route) && (stats.routes_changed += 1)
     end
 end

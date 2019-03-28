@@ -66,7 +66,7 @@ Main function controlling a simulation
 function run_sim!(sim_data::SimData, λ_ind::Float64, λ_soc::Float64,
                  iter::Int64; perturbed::Bool = true,proc_id=0)
 
-                 fname = "queue_lind_$(λ_ind)_lsoc_$(λ_soc)"
+                 fname = "$(lpad(proc_id, 4, '0'))_Q_lind_$(λ_ind)_lsoc_$(λ_soc)"
     @info "Opening file $fname"
     file = open(fname, "w")
     println(file, "proc,time,i,type,l_ind,l_soc,mean_driving_times,std_driving_times,mean_delays,std_delays,routes_changed")
